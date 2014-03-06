@@ -115,7 +115,7 @@ func (msg *reqMsg) read(conn net.Conn) (err error) {
 	//	log.Println(err)
 	//	return
 	//}
-	msg.dst_port2 = uint16((msg.dst_port[0] << 8) + msg.dst_port[1])
+	msg.dst_port2 = (uint16(msg.dst_port[0]) << 8) + uint16(msg.dst_port[1])
 
 	switch msg.cmd {
 	case 1:
@@ -127,7 +127,7 @@ func (msg *reqMsg) read(conn net.Conn) (err error) {
 	}
 	switch msg.atyp {
 	case 1: // ipv4
-		msg.url = fmt.Sprintf("%d,%d,%d,%d:%d", msg.dst_addr[0], msg.dst_addr[1], msg.dst_addr[2], msg.dst_addr[3], msg.dst_port2)
+		msg.url = fmt.Sprintf("%d.%d.%d.%d:%d", msg.dst_addr[0], msg.dst_addr[1], msg.dst_addr[2], msg.dst_addr[3], msg.dst_port2)
 	case 3: //DOMANNAME
 		msg.url = string(msg.dst_addr[1 : 1+msg.dst_addr[0]])
 		msg.url += fmt.Sprintf(":%d", msg.dst_port2)
